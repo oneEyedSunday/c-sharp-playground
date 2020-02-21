@@ -30,6 +30,9 @@ namespace PatternMatching
 
             bool grantEntry = ShouldAllowEntry(voyager);
             Console.WriteLine("{0}, you have been {1} visa to {2}", voyager.Oriki, grantEntry ? "granted" : "denied", voyager.Destination);
+
+            Console.WriteLine(AnnounceTeams("Getafe", "Ajax"));
+            Console.WriteLine(AnnounceTeams("Liverpool", "AFC Bournemouth"));
         }
 
         public static bool ShouldAllowEntry(Voyager hobo) =>
@@ -39,6 +42,13 @@ namespace PatternMatching
             { CountryOrigin: "Nigeria" } => false,
             _ => false
         };
+
+        private static string AnnounceTeams(string first, string second) =>
+            (first, second) switch
+            {
+                ("Liverpool", _) => $"Unbeaten {first} to steamroll another team",
+                (_, _) => $"{first} to play {second}"
+            };
     }
 
 
