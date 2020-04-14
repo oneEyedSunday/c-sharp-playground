@@ -24,6 +24,8 @@ namespace _101
             Program.TrimStringsAndDisplay("    Irreconcilable differences   ");
 
             Program.ReplaceAndDisplay("Terrier is King", "king", "Queen");
+
+            Program.PartsTest("Ignatius Agu", "gu");
         }
 
 
@@ -38,6 +40,11 @@ namespace _101
         static void ReplaceAndDisplay(string original, string candidate, string replacement)
         {
             Console.WriteLine($"Initia String is [{original}], replaced string is [{original.ToLower().Replace(candidate, replacement)}]");
+        }
+
+        static void PartsTest(string value, string candidate)
+        {
+            Console.WriteLine($"Does [{value}] contain [{candidate}]: {value.Contains(candidate)}");
         }
     }
 }
