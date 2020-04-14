@@ -26,6 +26,10 @@ namespace _101
             Program.ReplaceAndDisplay("Terrier is King", "king", "Queen");
 
             Program.PartsTest("Ignatius Agu", "gu");
+
+            Console.WriteLine("-------Integer Math-------");
+
+            Integers.Go();
         }
 
 
