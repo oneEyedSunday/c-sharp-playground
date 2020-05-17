@@ -2,6 +2,8 @@
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
+using ChannelPlayGround.Models;
+
 namespace ChannelPlayGround
 {
     class Program
@@ -28,17 +30,42 @@ namespace ChannelPlayGround
                 aChannel.Writer.Complete();
             };
 
-            var consumer = Task.Run(ReadFromChannelAction);
+            //var consumer = Task.Run(ReadFromChannelAction);
 
-            var producer = Task.Run(WriteRandomStuffToChannelAction);
+            //var producer = Task.Run(WriteRandomStuffToChannelAction);
 
-            await Task.WhenAll(producer, consumer);
+            //await Task.WhenAll(producer, consumer);
 
             var jerseyProcessing = Generator<string>.GenerateReaderFrom(new string[] {
                 "Nelson Semedo", "Miralem Pjanic"
             });
-            await foreach (string item in jerseyProcessing.ReadAllAsync())
-                Console.WriteLine("Received Jersey Order For {0}", item);
+
+            var eSportsProcessor = Generator<ESportTopic>.GenerateReaderFrom(new ESportTopic[]
+            {
+                new ESportTopic { Target = "CoD", Theme = "GamePlay Demo" },
+                new ESportTopic { Penetration = 390, Target = "James Bond: 007" },
+                new ESportTopic { Penetration = 4, Target = "Shadow of Mordor" },
+                new ESportTopic { Target = "FarCry 25" },
+                new ESportTopic { Penetration = 4075, Target = "Borderlands 5", },
+                new ESportTopic { Penetration = 755, Target = "Wanted" },
+                new ESportTopic { Target = "Football Manager 2020", Theme = "Unveiling" },
+                new ESportTopic { Penetration = 94, Target = "Castlevania", Theme = "[Unknown]" }
+            });
+
+
+            while (await jerseyProcessing.WaitToReadAsync() || await eSportsProcessor.WaitToReadAsync())
+            {
+                try
+                {
+                    Console.WriteLine("Received Jersey Order For {0}", await jerseyProcessing.ReadAsync());
+                    Console.WriteLine("[🎮 + ✍️ ] New trend alert {0}", (await eSportsProcessor.ReadAsync()).Target);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("[💣] An Error Occured during Processing: {0}", ex.Message);
+                }
+            }
+
         }
     }
 }
