@@ -33,6 +33,12 @@ namespace ChannelPlayGround
             var producer = Task.Run(WriteRandomStuffToChannelAction);
 
             await Task.WhenAll(producer, consumer);
+
+            var jerseyProcessing = Generator<string>.GenerateReaderFrom(new string[] {
+                "Nelson Semedo", "Miralem Pjanic"
+            });
+            await foreach (string item in jerseyProcessing.ReadAllAsync())
+                Console.WriteLine("Received Jersey Order For {0}", item);
         }
     }
 }
