@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
@@ -58,10 +59,29 @@ namespace ChannelPlayGround
             var consolidatedChannel = Multiplexer.Merge(new[] { processor2, eSportsProcessor });
 
 
-            await foreach (var item in consolidatedChannel.ReadAllAsync())
+            //await foreach (var item in consolidatedChannel.ReadAllAsync())
+            //{
+            //    Console.WriteLine("[🎮 + ✍️ ] New trend alert {0}", item.Target);
+            //}
+
+            // TAke the merged producer and consume with 5 consumers
+            var roundRobinReaders = DeMultiplexer.Split<ESportTopic>(eSportsProcessor, 3);
+            var tasks = new List<Task>();
+
+            for (short i = 0; i < roundRobinReaders.Count; i++)
             {
-                Console.WriteLine("[🎮 + ✍️ ] New trend alert {0}", item.Target);
+                var reader = roundRobinReaders[i];
+
+                Action WorkConsume = async () =>
+                {
+                    await foreach (var item in reader.ReadAllAsync())
+                        Console.WriteLine("[Monitor::{0}]: {1} is {2}", i, item.Target, item.Theme);
+                };
+
+                tasks.Add(Task.Run(WorkConsume));
             }
+
+            await Task.WhenAll(tasks);
 
         }
     }
