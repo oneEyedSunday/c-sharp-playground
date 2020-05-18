@@ -49,16 +49,18 @@ namespace ChannelPlayGround
                 new ESportTopic { Penetration = 4075, Target = "Borderlands 5", }
             });
 
-            var consolidatedChannel = Multiplexer.Merge<ESportTopic>(Generator<ESportTopic>.GenerateReaderFrom(new ESportTopic[] {
+            var processor2 = Generator<ESportTopic>.GenerateReaderFrom(new ESportTopic[] {
                 new ESportTopic { Penetration = 755, Target = "Wanted" },
                 new ESportTopic { Target = "Football Manager 2020", Theme = "Unveiling" },
                 new ESportTopic { Penetration = 94, Target = "Castlevania", Theme = "[Unknown]" }
-            }), eSportsProcessor);
+            });
+
+            var consolidatedChannel = Multiplexer.Merge(new[] { processor2, eSportsProcessor });
 
 
             await foreach (var item in consolidatedChannel.ReadAllAsync())
             {
-                Console.WriteLine("[🎮 + ✍️ ] New trend alert {0}", (await eSportsProcessor.ReadAsync()).Target);
+                Console.WriteLine("[🎮 + ✍️ ] New trend alert {0}", item.Target);
             }
 
         }

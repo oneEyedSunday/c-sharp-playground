@@ -17,7 +17,7 @@ namespace ChannelPlayGround
                 for (short i = 0; i < messages.Length; i++)
                 {
                     await aChannel.Writer.WriteAsync(messages[i]);
-                    await Task.Delay(TimeSpan.FromSeconds(rnd.Next(i * 30)));
+                    await Task.Delay(TimeSpan.FromSeconds(rnd.Next(3)));
                 }
                 aChannel.Writer.Complete();
             });
