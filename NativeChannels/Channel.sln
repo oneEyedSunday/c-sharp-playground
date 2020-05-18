@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Channel", "Channel.csproj", "{4F5BDB29-6A42-44AF-B94C-00AB59E9A7EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeChannels", "NativeChannels.csproj", "{4F5BDB29-6A42-44AF-B94C-00AB59E9A7EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

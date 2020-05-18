@@ -4,7 +4,7 @@ using System.Threading.Channels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ChannelPlayGround
+namespace NativeChannels
 {
     public static class DeMultiplexer
     {

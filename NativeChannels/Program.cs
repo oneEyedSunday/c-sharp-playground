@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-using ChannelPlayGround.Models;
+using NativeChannels.Models;
 
-namespace ChannelPlayGround
+namespace NativeChannels
 {
     class Program
     {
