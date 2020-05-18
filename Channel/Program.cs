@@ -105,6 +105,18 @@ namespace ChannelPlayGround
                 Console.WriteLine("{0} occured: Message {1}", ex.GetType().Name, ex.Message);
             }
 
+            heros = Generator<string>.GenerateReaderFrom(new[]
+            {
+                "Ali", "Simbi", "Ada", "Ciroma"
+            }, cancelToken.Token);
+
+            cancelToken.CancelAfter(TimeSpan.FromSeconds(1));
+
+            await foreach (var item in heros.ReadAllAsync())
+                Console.WriteLine(item);
+
+
+
         }
     }
 }

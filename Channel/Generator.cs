@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Threading.Channels;
-
+using System.Threading;
 
 namespace ChannelPlayGround
 {
     public class Generator<T>
     {
-        public static ChannelReader<T> GenerateReaderFrom(T[] messages)
+        public static ChannelReader<T> GenerateReaderFrom(T[] messages, CancellationToken cToken = default)
         {
             Channel<T> aChannel = Channel.CreateBounded<T>(messages.Length);
             var rnd = new Random();
@@ -16,8 +16,13 @@ namespace ChannelPlayGround
             {
                 for (short i = 0; i < messages.Length; i++)
                 {
+                    if (cToken.IsCancellationRequested)
+                    {
+                        Console.WriteLine("Stopping Comms....");
+                        break;
+                    }
                     await aChannel.Writer.WriteAsync(messages[i]);
-                    await Task.Delay(TimeSpan.FromSeconds(5 * rnd.Next(3)));
+                    await Task.Delay(TimeSpan.FromSeconds(rnd.Next(3)));
                 }
                 aChannel.Writer.Complete();
             });
