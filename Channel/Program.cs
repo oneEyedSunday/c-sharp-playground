@@ -46,24 +46,19 @@ namespace ChannelPlayGround
                 new ESportTopic { Penetration = 390, Target = "James Bond: 007" },
                 new ESportTopic { Penetration = 4, Target = "Shadow of Mordor" },
                 new ESportTopic { Target = "FarCry 25" },
-                new ESportTopic { Penetration = 4075, Target = "Borderlands 5", },
+                new ESportTopic { Penetration = 4075, Target = "Borderlands 5", }
+            });
+
+            var consolidatedChannel = Multiplexer.Merge<ESportTopic>(Generator<ESportTopic>.GenerateReaderFrom(new ESportTopic[] {
                 new ESportTopic { Penetration = 755, Target = "Wanted" },
                 new ESportTopic { Target = "Football Manager 2020", Theme = "Unveiling" },
                 new ESportTopic { Penetration = 94, Target = "Castlevania", Theme = "[Unknown]" }
-            });
+            }), eSportsProcessor);
 
 
-            while (await jerseyProcessing.WaitToReadAsync() || await eSportsProcessor.WaitToReadAsync())
+            await foreach (var item in consolidatedChannel.ReadAllAsync())
             {
-                try
-                {
-                    Console.WriteLine("Received Jersey Order For {0}", await jerseyProcessing.ReadAsync());
-                    Console.WriteLine("[🎮 + ✍️ ] New trend alert {0}", (await eSportsProcessor.ReadAsync()).Target);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("[💣] An Error Occured during Processing: {0}", ex.Message);
-                }
+                Console.WriteLine("[🎮 + ✍️ ] New trend alert {0}", (await eSportsProcessor.ReadAsync()).Target);
             }
 
         }
