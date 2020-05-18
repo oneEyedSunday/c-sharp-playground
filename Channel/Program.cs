@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
@@ -59,13 +60,13 @@ namespace ChannelPlayGround
             var consolidatedChannel = Multiplexer.Merge(new[] { processor2, eSportsProcessor });
 
 
-            //await foreach (var item in consolidatedChannel.ReadAllAsync())
-            //{
-            //    Console.WriteLine("[🎮 + ✍️ ] New trend alert {0}", item.Target);
-            //}
+            await foreach (var item in consolidatedChannel.ReadAllAsync())
+            {
+                Console.WriteLine("[🎮 + ✍️ ] New trend alert {0}", item.Target);
+            }
 
             // TAke the merged producer and consume with 5 consumers
-            var roundRobinReaders = DeMultiplexer.Split<ESportTopic>(eSportsProcessor, 3);
+            var roundRobinReaders = DeMultiplexer.Split(eSportsProcessor, 3);
             var tasks = new List<Task>();
 
             for (short i = 0; i < roundRobinReaders.Count; i++)
@@ -82,6 +83,27 @@ namespace ChannelPlayGround
             }
 
             await Task.WhenAll(tasks);
+
+
+            var heros = Generator<string>.GenerateReaderFrom(new []
+            {
+                "Ali", "Simbi", "Ada", "Ciroma"
+            });
+
+            var cancelToken = new CancellationTokenSource();
+
+            cancelToken.CancelAfter(TimeSpan.FromSeconds(2));
+
+            try
+            {
+                await foreach (var item in heros.ReadAllAsync(cancelToken.Token))
+                    Console.WriteLine("Welcoming {0}", item);
+
+                Console.WriteLine("All heroes welcome");
+            } catch (Exception ex)
+            {
+                Console.WriteLine("{0} occured: Message {1}", ex.GetType().Name, ex.Message);
+            }
 
         }
     }
