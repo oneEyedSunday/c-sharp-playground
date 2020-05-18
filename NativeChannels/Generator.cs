@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Threading.Channels;
 using System.Threading;
 
-namespace ChannelPlayGround
+namespace NativeChannels
 {
     public class Generator<T>
     {

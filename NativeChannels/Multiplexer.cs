@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-namespace ChannelPlayGround
+namespace NativeChannels
 {
     public static class Multiplexer
     {

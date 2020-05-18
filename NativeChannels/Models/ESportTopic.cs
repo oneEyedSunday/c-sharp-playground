@@ -1,5 +1,5 @@
 ﻿using System;
-namespace ChannelPlayGround.Models
+namespace NativeChannels.Models
 {
     public class ESportTopic
     {
